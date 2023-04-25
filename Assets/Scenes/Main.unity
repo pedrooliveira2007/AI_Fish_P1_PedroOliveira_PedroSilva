@@ -457,19 +457,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1219772817526566235, guid: 6b47f561d7186bf46b8b9441e8bb86be, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.9859497
       objectReference: {fileID: 0}
     - target: {fileID: 1219772817526566235, guid: 6b47f561d7186bf46b8b9441e8bb86be, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 1219772817526566235, guid: 6b47f561d7186bf46b8b9441e8bb86be, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: 0.16704272
       objectReference: {fileID: 0}
     - target: {fileID: 1219772817526566235, guid: 6b47f561d7186bf46b8b9441e8bb86be, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 1219772817526566235, guid: 6b47f561d7186bf46b8b9441e8bb86be, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -477,97 +477,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1219772817526566235, guid: 6b47f561d7186bf46b8b9441e8bb86be, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 19.232
       objectReference: {fileID: 0}
     - target: {fileID: 1219772817526566235, guid: 6b47f561d7186bf46b8b9441e8bb86be, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1323338821652873482, guid: 6b47f561d7186bf46b8b9441e8bb86be, type: 3}
-      propertyPath: m_Size.z
-      value: 1.2016219
-      objectReference: {fileID: 0}
-    - target: {fileID: 1323338821652873482, guid: 6b47f561d7186bf46b8b9441e8bb86be, type: 3}
-      propertyPath: m_Center.z
-      value: -0.56026727
-      objectReference: {fileID: 0}
-    - target: {fileID: 1323338821652873482, guid: 6b47f561d7186bf46b8b9441e8bb86be, type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1630130664766079106, guid: 6b47f561d7186bf46b8b9441e8bb86be, type: 3}
       propertyPath: m_Name
       value: Fish
       objectReference: {fileID: 0}
-    - target: {fileID: 3091078246216317545, guid: 6b47f561d7186bf46b8b9441e8bb86be, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.11919999
-      objectReference: {fileID: 0}
-    - target: {fileID: 3113018710961395395, guid: 6b47f561d7186bf46b8b9441e8bb86be, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.439
-      objectReference: {fileID: 0}
-    - target: {fileID: 3972731813549905021, guid: 6b47f561d7186bf46b8b9441e8bb86be, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.060750008
-      objectReference: {fileID: 0}
-    - target: {fileID: 4579643104822295480, guid: 6b47f561d7186bf46b8b9441e8bb86be, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.7702
-      objectReference: {fileID: 0}
-    - target: {fileID: 6383200350689388616, guid: 6b47f561d7186bf46b8b9441e8bb86be, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -1.01045
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 2003050656206012986, guid: 6b47f561d7186bf46b8b9441e8bb86be, type: 3}
+    - target: {fileID: 2426453952333322557, guid: 6b47f561d7186bf46b8b9441e8bb86be, type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 734966195}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6b47f561d7186bf46b8b9441e8bb86be, type: 3}
---- !u!1 &1775274351692252967 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1630130664766079106, guid: 6b47f561d7186bf46b8b9441e8bb86be, type: 3}
-  m_PrefabInstance: {fileID: 1775274351692252966}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1775274351692252968
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1775274351692252967}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe7c998d775037345acf30c185ca8907, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  normalSpeed: 20
-  fastSpeed: 800
-  lungeSpeed: 80
-  target: {fileID: 734966195}
-  normalAcceleration: 1
-  lungeAcceleration: 5
-  fastAcceleration: 3
-  rb: {fileID: 1775274351692252969}
-  tankHeight: 5
-  tankLenght: 9
-  tankWidht: 20
-  flee: 0
-  wander: 0
-  chase: 0
-  lunge: 0
-  idle: 0
---- !u!54 &1775274351692252969
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1775274351692252967}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 64
-  m_CollisionDetection: 0
