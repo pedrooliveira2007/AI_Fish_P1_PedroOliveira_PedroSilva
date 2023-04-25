@@ -16,6 +16,7 @@ public class Fishtank : MonoBehaviour
         cube.transform.localScale = new Vector3(lenght, height, width);
         cube.name = "Tank";
         cube.GetComponent<Renderer>().material = tankMaterial;
+        cube.GetComponent<BoxCollider>().isTrigger = true;
     }
 
     // Update is called once per frame
