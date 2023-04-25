@@ -31,17 +31,39 @@ class MovementBehaviour : Monobehaviour
                RotateToTarget(fleeTarget);
                
                 // Give full acceleration along this direction
-                Move();
+                MoveForward();
 
             }
 
     }
     private void Wander()
     {
-
+        usingSpeed = normalSpeed;
+        usingAcceleration = normalAcceleration;
+        
+        // Get a random target position
+        Vector3 pos = new vector3(Random.Range(min,max),
+                            Random.Range(min,max),Random.Range(min,max));
+        // Get the direction to the target and rotates 
+        RotateToTarget(pos);
+       
+        // Move forward at the given speed and acceleration
+        MoveForward();
     }
     private void Chase()
     {
+        usingSpeed = fastSpeed;
+        usingAcceleration = fastAcceleration;
+       
+            // Do I have a target?
+            if (target != null)
+                // Get the direction to the target and rotates 
+                 RotateToTarget(target.position);
+               
+                // Move forward at the given speed and acceleration
+                MoveForward();
+
+            }
 
     }
 
@@ -49,20 +71,30 @@ class MovementBehaviour : Monobehaviour
     {
         usingSpeed = lungeSpeed;
         usingAcceleration = lungeAcceleration;
-        Chase();
+      
+            // Do I have a target?
+            if (target != null)
+                // Get the direction to the target and rotates 
+                 RotateToTarget(target.position);
+               
+                // Move forward at the given speed and acceleration
+                MoveForward();
+
+            }
+
 
     }
 
     private void Idle()
     {   
-        
+        usingSpeed = 0f;
+        usingAcceleration = 0f;
     }
 
     private void MoveForward()
     {
         Vector3 move = transform.position * Vector3.forward *
                         usingSpeed* usingAcceleration*Time.deltaTime;
-                        
         rb.velocity = new vector3(rb.velocity.x, rb.velocity.y,move.z );
     
     }
