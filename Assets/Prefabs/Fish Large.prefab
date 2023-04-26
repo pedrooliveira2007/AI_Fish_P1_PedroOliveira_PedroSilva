@@ -263,9 +263,9 @@ GameObject:
   - component: {fileID: 6321041790958817770}
   - component: {fileID: 2426453952333322557}
   - component: {fileID: 1775274351692252974}
-  - component: {fileID: -4484241583558553173}
+  - component: {fileID: -7026746185676563241}
   m_Layer: 0
-  m_Name: Fish
+  m_Name: Fish Large
   m_TagString: Untagged
   m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -280,7 +280,7 @@ Transform:
   m_GameObject: {fileID: 1630130664766079106}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.75, y: 1.75, z: 1.75}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3972731813549905021}
@@ -377,7 +377,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &-4484241583558553173
+--- !u!114 &-7026746185676563241
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -389,7 +389,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11d3958ca235ad34096ae2f4ebac7286, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fishType: 1
+  fishType: 2
   energy: 0
 --- !u!1 &1760627171979401543
 GameObject:
