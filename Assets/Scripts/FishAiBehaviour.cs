@@ -8,7 +8,7 @@ class FishAiBehaviour : MonoBehaviour
     [SerializeField] private float normalAcceleration, lungeAcceleration, fastAcceleration;
     private float usingSpeed = 0, usingAcceleration = 0;
 
-    private Vector3 target;
+    private Transform target;
     private Fish fishInfo;
 
     [SerializeField] private Animator anim;
@@ -24,120 +24,134 @@ class FishAiBehaviour : MonoBehaviour
     }
     private void Start()
     {
-        State chaseState = new State("Chase",
-            () => { },
-            Chase, // set the Chase method as the state's action
-            () => { /* actions to perform when exiting the chase state */ });
+        State pursueState = new State("Pursue",
+            () => { Debug.Log("pur");/* actions to perform when entering the pursue state */},
+            Pursue, // set the Chase method as the state's action
+            () => { /* actions to perform when exiting the pursue state */ }
+            );
 
         State idleState = new State("Idle",
+            () => { Debug.Log("idle"); /* actions to perform when entering the idle state */ },
+           Idle,
+            () => { /* actions to perform when exiting the idle state */ }
+            );
+
+
+        State evadeState = new State("Evade",
+           () => { Debug.Log("evade");/* actions to perform when entering the evade state */ },
+           Evade, // set the evade method as the state's action
+           () => { fishInfo.BeingChased(false); }
+           );
+
+
+        State consumeState = new State("Consume",
+           () => { Debug.Log("consume"); /* actions to perform when entering the consume state */ },
+           Consume, // set the consume method as the state's action
+           () => {/* actions to perform when exiting the consume state */ }
+           );
+
+
+        State reproduceState = new State("Reproduce",
+           () => { Debug.Log("repro");/* actions to perform when entering the consume state */ },
+           Reproduce, // set the consume method as the state's action
+           () => {/* actions to perform when exiting the consume state */ }
+           );
+
+
+        Transition transitionToPursue = new Transition(
+            () => (fishInfo.Energy < 100 && !fishInfo.Chased),
             () => { },
-            Idle, // set the Idle method as the state's action
-            () => { /* actions to perform when exiting the idle state */ });
+            pursueState);
 
-
-        State fleeState = new State("Flee",
-           () => { /* actions to perform when entering the flee state */ },
-           Flee, // set the flee method as the state's action
-           () => { /* actions to perform when exiting the flee state */ });
-
-
-
-        Transition transitionToChase = new Transition(
-            () =>
-            {
-                if (fishInfo.FishType != FishType.small)
-                {
-                    // Get vector to closest target
-                    Vector3 toClosest = GetClosestFish(false) - transform.position;
-
-                    if (target != toClosest && fishInfo.Energy < 75)
-                    {
-                        target = toClosest;
-                        return true;
-                    }
-                }
-
-                if (fishInfo.FishType != FishType.big)
-                {
-                    // Get vector to closest target
-                    Vector3 toClosest = GetClosestAlgae() - transform.position;
-
-                    if (target != toClosest && fishInfo.Energy < 75)
-                    {
-                        target = toClosest;
-                        return true;
-                    }
-                }
-
-                return false;
-            },
-            () =>
-            {
-                RotateToTarget();
-                MoveForward();
-            },
-            chaseState);
-
-        Transition transitionToFlee = new Transition(
-           () =>
-           {
-               // Get vector from the closest enemy
-               Vector3 toClosest = transform.position - GetClosestFish();
-
-               if (target != toClosest)
-               {
-                   target = toClosest;
-                   return true;
-               }
-               return false;
-           },
-           () =>
-           {
-               RotateToTarget();
-               MoveForward();
-           },
-           fleeState);
+        Transition transitionToEvade = new Transition(
+           () => fishInfo.Chased,
+           () => { },
+           evadeState);
 
         Transition transitionToIdle = new Transition(
-            () =>
-            {
-                if (fishInfo.Energy >= 75)
-                {
-                    return true;
-                }
-                return false;
-            },
-            () => { MoveForward(); },
+            () => (fishInfo.Energy >= 75),
+            () => { },
             idleState);
 
+        Transition transitionToConsume = new Transition(
+            () => (target != null && Vector3.Distance(transform.position, target.position) < 0.005f),
+            () => { },
+           consumeState);
+
+
+        Transition transitionToReproduce = new Transition(
+            () => (fishInfo.Energy >= 100 && !fishInfo.Chased),
+            () => { },
+            reproduceState);
+
         fsm = new StateMachine(idleState);
-        chaseState.AddTransition(transitionToIdle);
-        chaseState.AddTransition(transitionToFlee);
-        chaseState.AddTransition(transitionToChase);
+        pursueState.AddTransition(transitionToIdle);
+        pursueState.AddTransition(transitionToEvade);
+        pursueState.AddTransition(transitionToConsume);
+        pursueState.AddTransition(transitionToReproduce);
 
+        idleState.AddTransition(transitionToPursue);
+        idleState.AddTransition(transitionToEvade);
+        idleState.AddTransition(transitionToReproduce);
 
-        idleState.AddTransition(transitionToIdle);
-        chaseState.AddTransition(transitionToFlee);
-        chaseState.AddTransition(transitionToChase);
+        consumeState.AddTransition(transitionToPursue);
+        consumeState.AddTransition(transitionToEvade);
+        consumeState.AddTransition(transitionToIdle);
 
+        evadeState.AddTransition(transitionToPursue);
+        evadeState.AddTransition(transitionToIdle);
+    }
 
-
+    private void Reproduce()
+    {
+        fishInfo.Reproduce();
     }
 
     private void FixedUpdate()
     {
-        fsm.Update();
-        Animate();
+        Action actions = fsm.Update();
+        actions?.Invoke();
+        if (target != null)
+        {
+            RotateToTarget();
+        }
     }
 
+    private void Update()
+    {
+        Animate();
 
-    private void Chase()
+    }
+
+    private void Pursue()
     {
 
+        if (fishInfo.FishType != FishType.big)
+        {
+            // Get vector to closest target
+            Transform toClosest = GetClosestAlgae();
+
+            if (target != toClosest && fishInfo.Energy < 75)
+            {
+                target = toClosest;
+            }
+        }
+
+        if (fishInfo.FishType != FishType.small)
+        {
+            // Get vector to closest target
+            Transform toClosest = GetClosestFish(false);
+
+            if (target != toClosest)
+            {
+                target = toClosest;
+            }
+        }
         //change maxSpeed and acceleration to chase/flee value
         usingSpeed = fastSpeed;
         usingAcceleration = fastAcceleration;
-
+        Debug.Log(target.position);
+        MoveForward();
     }
 
 
@@ -150,17 +164,24 @@ class FishAiBehaviour : MonoBehaviour
 
     }
 
+    private void Consume()
+    {
 
-    private void Flee()
+        fishInfo.Eat(target);
+
+    }
+
+    private void Evade()
     {
         //change maxSpeed and acceleration to chase/flee value
         usingSpeed = fastSpeed;
         usingAcceleration = fastAcceleration;
 
+        MoveForward();
     }
 
 
-    private Vector3 GetClosestFish(bool enemy = true)
+    private Transform GetClosestFish(bool enemy = true)
     {
         Rigidbody best = null;
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius);
@@ -206,13 +227,13 @@ class FishAiBehaviour : MonoBehaviour
 
         }
 
-        if (best == null) return transform.position;
-        return best.position;
+        if (best == null) return transform;
+        return best.transform;
 
 
     }
 
-    private Vector3 GetClosestAlgae()
+    private Transform GetClosestAlgae()
     {
         Collider best = null;
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius);
@@ -235,15 +256,15 @@ class FishAiBehaviour : MonoBehaviour
 
         }
 
-        if (best == null) return transform.position;
-        return best.transform.position;
+        if (best == null) return transform;
+        return best.transform;
 
     }
 
     private void MoveForward()
     {
 
-        rb.AddForce(target.normalized * usingAcceleration);
+        rb.AddForce(-target.position.normalized * usingAcceleration);
 
         // Limit the maximum speed of the object
         if (rb.velocity.magnitude > usingSpeed)
@@ -257,22 +278,26 @@ class FishAiBehaviour : MonoBehaviour
     private void RotateToTarget()
     {
         transform.rotation =
-            Quaternion.LookRotation(target - transform.position);
+            Quaternion.LookRotation(target.position - transform.position);
     }
 
 
     private void Animate()
     {
-        if ((Vector3.Distance(target, transform.position) > 0.5f))
+        if (target == null)
+        {
+            anim.SetFloat("Speed", 1);
+        }
+        else if ((Vector3.Distance(target.position, transform.position) > 0.5f))
         {
 
-            if (Vector3.Distance(target, transform.position) < 1)
+            if (Vector3.Distance(target.position, transform.position) < 1)
             {
                 anim.SetFloat("Speed", 1);
             }
             else
             {
-                anim.SetFloat("Speed", Vector3.Distance(target, transform.position));
+                anim.SetFloat("Speed", Vector3.Distance(target.position, transform.position));
             }
 
         }

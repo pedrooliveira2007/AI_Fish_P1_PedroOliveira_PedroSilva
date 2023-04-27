@@ -1,18 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 
 public class Fish : MonoBehaviour
 {
     [SerializeField] private FishType fishType;
     [SerializeField] private float energy;
-    public float Energy {get => energy;} 
+    public float Energy {get => energy;}
+    public FishType FishType { get => fishType; }
+    public bool Chased { get; internal set; }
+
     private FishSpawner fishSpawner;
 
     void Start()
     {
         GameObject fishSpawnerParent = GameObject.FindGameObjectWithTag("FishSpawner");
         fishSpawner = fishSpawnerParent.GetComponent<FishSpawner>();
+        energy = 50f;
     }
 
     void Update()
@@ -28,9 +31,22 @@ public class Fish : MonoBehaviour
         energy -= oldEnergy;
     }
 
-    public void Eat()
+    public void BeingChased(bool val)
     {
-        
+        Chased = val;
+    }
+
+    public void Eat(Transform target)
+    {
+        if (target.tag == "Fish")
+        {
+            energy += target.localScale.x ;
+        }
+        if (target.tag == "SeaWeed")
+        {
+            energy += 5 ;
+        }
+        Destroy(target.gameObject);
     }
 
     public void Reproduce()
