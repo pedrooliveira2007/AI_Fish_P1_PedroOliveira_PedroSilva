@@ -4,9 +4,9 @@ using UnityEngine;
 
 class FishAiBehaviour : MonoBehaviour
 {
-    [SerializeField] private float normalSpeed, fastSpeed, lungeSpeed;
-    [SerializeField] private float normalAcceleration, lungeAcceleration, fastAcceleration;
-    private float usingSpeed = 0, usingAcceleration = 0;
+    [SerializeField] private float normalSpeed, fastSpeed;
+    [SerializeField] private float normalAcceleration, fastAcceleration;
+    private float usingSpeed = 0;
 
     private Transform target;
     private Fish fishInfo;
@@ -149,7 +149,6 @@ class FishAiBehaviour : MonoBehaviour
         }
         //change maxSpeed and acceleration to chase/flee value
         usingSpeed = fastSpeed;
-        usingAcceleration = fastAcceleration;
         Debug.Log(target.position);
         MoveForward();
     }
@@ -160,7 +159,6 @@ class FishAiBehaviour : MonoBehaviour
 
         //change maxSpeed and acceleration to idle value
         usingSpeed = 0;
-        usingAcceleration = 0;
         MoveForward();
     }
 
@@ -175,7 +173,6 @@ class FishAiBehaviour : MonoBehaviour
     {
         //change maxSpeed and acceleration to chase/flee value
         usingSpeed = fastSpeed;
-        usingAcceleration = fastAcceleration;
 
         MoveForward();
     }
@@ -194,8 +191,6 @@ class FishAiBehaviour : MonoBehaviour
             {
                 if (targ.tag == "Fish")
                 {
-
-
                     if (enemy)
                     {
                         if (targ.transform.localScale.x > transform.localScale.x) //if fish isnt null and is greater than me  and is a fish
@@ -211,7 +206,7 @@ class FishAiBehaviour : MonoBehaviour
                         }
                     }
 
-                    else if (targ.transform.localScale.x < transform.localScale.x) //if not enemy that i'm looking for, then is algae?
+                    else if (targ.transform.localScale.x < transform.localScale.x) //if not enemy that i'm looking for, then is small than me?
                     {
                         if (best == null)
                         {
@@ -249,7 +244,7 @@ class FishAiBehaviour : MonoBehaviour
                 }
                 else if (Vector3.Distance(transform.position, col.transform.position) < Vector3.Distance(best.transform.position, transform.position))
                 {
-                    best = best.transform.localScale.x < col.transform.localScale.x ? col : best; //if the new is greater than the old, change
+                    best = col; //if the new is greater than the old, change
                 }
 
             }
@@ -262,13 +257,13 @@ class FishAiBehaviour : MonoBehaviour
     }
 
     private void MoveForward()
-    { 
+    {
         Vector3 move = Vector3.zero;
-        if(target != null)
+        if (target != null)
         {
             move = (target.position - transform.position) * usingSpeed * Time.fixedDeltaTime;
         }
-       
+
 
         rb.velocity = new Vector3(move.x, move.y, move.z);
         // Limit the maximum speed of the object

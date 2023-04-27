@@ -12,16 +12,16 @@ public class Fishtank : MonoBehaviour
     void Start()
     {
         GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        cube.transform.position = new Vector3(0,0, 0);
+        cube.transform.position = new Vector3(0, height/2, 0);
         cube.transform.localScale = new Vector3(lenght, height, width);
         cube.name = "Tank";
         cube.GetComponent<Renderer>().material = tankMaterial;
-        cube.GetComponent<BoxCollider>().isTrigger = true;
+        Destroy(cube.GetComponent<BoxCollider>());
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }
