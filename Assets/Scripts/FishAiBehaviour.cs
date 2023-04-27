@@ -161,7 +161,7 @@ class FishAiBehaviour : MonoBehaviour
         //change maxSpeed and acceleration to idle value
         usingSpeed = 0;
         usingAcceleration = 0;
-
+        MoveForward();
     }
 
     private void Consume()
@@ -262,10 +262,15 @@ class FishAiBehaviour : MonoBehaviour
     }
 
     private void MoveForward()
-    {
+    { 
+        Vector3 move = Vector3.zero;
+        if(target != null)
+        {
+            move = (target.position - transform.position) * usingSpeed * Time.fixedDeltaTime;
+        }
+       
 
-        rb.AddForce(-target.position.normalized * usingAcceleration);
-
+        rb.velocity = new Vector3(move.x, move.y, move.z);
         // Limit the maximum speed of the object
         if (rb.velocity.magnitude > usingSpeed)
         {
