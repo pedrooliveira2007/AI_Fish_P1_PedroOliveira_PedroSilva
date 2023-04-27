@@ -46,7 +46,7 @@ public class Fish : MonoBehaviour
         {
             energy += 5 ;
         }
-        Destroy(target.gameObject);
+        
     }
 
     public void Reproduce()

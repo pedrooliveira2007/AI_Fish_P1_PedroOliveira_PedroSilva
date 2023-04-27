@@ -59,12 +59,12 @@ class FishAiBehaviour : MonoBehaviour
 
 
         Transition transitionToPursue = new Transition(
-            () => (fishInfo.Energy < 100 && !fishInfo.Chased),
+            () => (fishInfo.Energy < 100 ),
             () => { },
             pursueState);
 
         Transition transitionToEvade = new Transition(
-           () => fishInfo.Chased,
+           () => GetClosestFish().tag == "Fish" ,
            () => { },
            evadeState);
 
@@ -74,7 +74,7 @@ class FishAiBehaviour : MonoBehaviour
             idleState);
 
         Transition transitionToConsume = new Transition(
-            () => (target != null && Vector3.Distance(transform.position, target.position) < 0.005f),
+            () => (target != null && Vector3.Distance(transform.position, target.position) < 0.2f),
             () => { },
            consumeState);
 
@@ -86,13 +86,14 @@ class FishAiBehaviour : MonoBehaviour
 
         fsm = new StateMachine(idleState);
         pursueState.AddTransition(transitionToIdle);
-        pursueState.AddTransition(transitionToEvade);
         pursueState.AddTransition(transitionToConsume);
         pursueState.AddTransition(transitionToReproduce);
 
+        idleState.AddTransition(transitionToIdle);
         idleState.AddTransition(transitionToPursue);
         idleState.AddTransition(transitionToEvade);
         idleState.AddTransition(transitionToReproduce);
+
 
         consumeState.AddTransition(transitionToPursue);
         consumeState.AddTransition(transitionToEvade);
@@ -100,6 +101,9 @@ class FishAiBehaviour : MonoBehaviour
 
         evadeState.AddTransition(transitionToPursue);
         evadeState.AddTransition(transitionToIdle);
+
+
+        reproduceState.AddTransition(transitionToIdle);
     }
 
     private void Reproduce()
@@ -149,7 +153,6 @@ class FishAiBehaviour : MonoBehaviour
         }
         //change maxSpeed and acceleration to chase/flee value
         usingSpeed = fastSpeed;
-        Debug.Log(target.position);
         MoveForward();
     }
 
@@ -166,7 +169,7 @@ class FishAiBehaviour : MonoBehaviour
     {
 
         fishInfo.Eat(target);
-
+        Destroy(target.gameObject);
     }
 
     private void Evade()
@@ -222,7 +225,7 @@ class FishAiBehaviour : MonoBehaviour
 
         }
 
-        if (best == null) return transform;
+        if (best == null) return target;
         return best.transform;
 
 
@@ -256,12 +259,15 @@ class FishAiBehaviour : MonoBehaviour
 
     }
 
-    private void MoveForward()
+    private void MoveForward(bool inverse = false)
     {
         Vector3 move = Vector3.zero;
         if (target != null)
         {
-            move = (target.position - transform.position) * usingSpeed * Time.fixedDeltaTime;
+            if (!inverse)
+                move = (target.position - transform.position) * usingSpeed * Time.fixedDeltaTime;
+            else
+                move = (-target.position - transform.position) * usingSpeed * Time.fixedDeltaTime;
         }
 
 
