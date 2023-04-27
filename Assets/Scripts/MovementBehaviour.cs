@@ -13,7 +13,6 @@ class MovementBehaviour : MonoBehaviour
 
     private float usingSpeed = 0, usingAcceleration = 0;
 
-
     private void FixedUpdate()
     {
 
@@ -39,15 +38,6 @@ class MovementBehaviour : MonoBehaviour
 
     }
 
-    private void Flee()
-    {
-
-
-    }
-    private void Wander()
-    {
-
-    }
     private void Chase()
     {
         usingSpeed = fastSpeed;
@@ -62,12 +52,6 @@ class MovementBehaviour : MonoBehaviour
             // Move forward at the given speed and acceleration
 
         }
-
-    }
-
-    private void Lunge()
-    {
-
 
     }
 
