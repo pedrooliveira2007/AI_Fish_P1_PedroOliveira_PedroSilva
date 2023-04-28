@@ -296,7 +296,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1630130664766079106}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.31, y: 0.25, z: 1.2137434}
@@ -351,16 +351,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   normalSpeed: 20
   fastSpeed: 100
-  lungeSpeed: 80
-  target: {fileID: 0}
   normalAcceleration: 1
-  lungeAcceleration: 5
   fastAcceleration: 3
   anim: {fileID: 2333570949218039638}
   rb: {fileID: 1775274351692252974}
   tankHeight: 5
   tankLenght: 9
   tankWidht: 20
+  detectionRadius: 2
 --- !u!54 &1775274351692252974
 Rigidbody:
   m_ObjectHideFlags: 0
