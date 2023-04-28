@@ -10,7 +10,7 @@ class FishAiBehaviour : MonoBehaviour
 
     private Transform target;
     private Fish fishInfo;
-
+    private bool away = false;
     [SerializeField] private Animator anim;
     [SerializeField] private Rigidbody rb;
     [SerializeField] private float tankHeight, tankLenght, tankWidht;
@@ -118,7 +118,7 @@ class FishAiBehaviour : MonoBehaviour
         actions?.Invoke();
         if (target != null)
         {
-            RotateToTarget();
+            RotateToTarget(away);
         }
     }
 
@@ -154,6 +154,7 @@ class FishAiBehaviour : MonoBehaviour
         }
         //change maxSpeed and acceleration to chase/flee value
         usingSpeed = fastSpeed;
+        away = false;
         MoveForward();
     }
 
@@ -177,7 +178,7 @@ class FishAiBehaviour : MonoBehaviour
     {
         //change maxSpeed and acceleration to chase/flee value
         usingSpeed = fastSpeed;
-
+        away = true;
         MoveForward(true);
     }
 
@@ -282,9 +283,9 @@ class FishAiBehaviour : MonoBehaviour
 
     }
 
-    private void RotateToTarget()
+    private void RotateToTarget(bool _away = false)
     {
-        transform.rotation =
+        transform.rotation =_away ? Quaternion.LookRotation(target.position + transform.position) :
             Quaternion.LookRotation(target.position - transform.position);
     }
 
