@@ -59,17 +59,17 @@ class FishAiBehaviour : MonoBehaviour
 
 
         Transition transitionToPursue = new Transition(
-            () => (fishInfo.Energy < 100 ),
+            () => ( fishInfo.Energy < 90),
             () => { },
             pursueState);
 
         Transition transitionToEvade = new Transition(
-           () => GetClosestFish().tag == "Fish" ,
+           () => GetClosestFish()!=null && GetClosestFish().tag == "Fish",
            () => { },
            evadeState);
 
         Transition transitionToIdle = new Transition(
-            () => (fishInfo.Energy >= 75),
+            () => (fishInfo.Energy >= 90 && target == null),
             () => { },
             idleState);
 
@@ -80,7 +80,7 @@ class FishAiBehaviour : MonoBehaviour
 
 
         Transition transitionToReproduce = new Transition(
-            () => (fishInfo.Energy >= 100 && !fishInfo.Chased),
+            () => (fishInfo.Energy >= 100),
             () => { },
             reproduceState);
 
@@ -88,16 +88,17 @@ class FishAiBehaviour : MonoBehaviour
         pursueState.AddTransition(transitionToIdle);
         pursueState.AddTransition(transitionToConsume);
         pursueState.AddTransition(transitionToReproduce);
+        pursueState.AddTransition(transitionToEvade);
 
         idleState.AddTransition(transitionToIdle);
         idleState.AddTransition(transitionToPursue);
         idleState.AddTransition(transitionToEvade);
         idleState.AddTransition(transitionToReproduce);
 
-
+        consumeState.AddTransition(transitionToIdle);
         consumeState.AddTransition(transitionToPursue);
         consumeState.AddTransition(transitionToEvade);
-        consumeState.AddTransition(transitionToIdle);
+
 
         evadeState.AddTransition(transitionToPursue);
         evadeState.AddTransition(transitionToIdle);
@@ -135,7 +136,7 @@ class FishAiBehaviour : MonoBehaviour
             // Get vector to closest target
             Transform toClosest = GetClosestAlgae();
 
-            if (target != toClosest && fishInfo.Energy < 75)
+            if (toClosest != null && target != toClosest && fishInfo.Energy < 75)
             {
                 target = toClosest;
             }
@@ -146,7 +147,7 @@ class FishAiBehaviour : MonoBehaviour
             // Get vector to closest target
             Transform toClosest = GetClosestFish(false);
 
-            if (target != toClosest)
+            if (toClosest != null && target != toClosest)
             {
                 target = toClosest;
             }
@@ -177,7 +178,7 @@ class FishAiBehaviour : MonoBehaviour
         //change maxSpeed and acceleration to chase/flee value
         usingSpeed = fastSpeed;
 
-        MoveForward();
+        MoveForward(true);
     }
 
 
@@ -225,7 +226,7 @@ class FishAiBehaviour : MonoBehaviour
 
         }
 
-        if (best == null) return target;
+        if (best == null) return null;
         return best.transform;
 
 
@@ -254,7 +255,7 @@ class FishAiBehaviour : MonoBehaviour
 
         }
 
-        if (best == null) return transform;
+        if (best == null) return null;
         return best.transform;
 
     }
