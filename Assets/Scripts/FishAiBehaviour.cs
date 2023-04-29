@@ -5,7 +5,6 @@ using UnityEngine;
 class FishAiBehaviour : MonoBehaviour
 {
     [SerializeField] private float normalSpeed, fastSpeed;
-    [SerializeField] private float normalAcceleration, fastAcceleration;
     private float usingSpeed = 0;
 
     private Transform target;
@@ -25,27 +24,27 @@ class FishAiBehaviour : MonoBehaviour
     private void Start()
     {
         State pursueState = new State("Pursue",
-            () => { Debug.Log("pur");/* actions to perform when entering the pursue state */},
+            () => { away = false; Debug.Log("pur");/* actions to perform when entering the pursue state */},
             Pursue, // set the Chase method as the state's action
             () => { /* actions to perform when exiting the pursue state */ }
             );
 
         State idleState = new State("Idle",
-            () => { Debug.Log("idle"); /* actions to perform when entering the idle state */ },
+            () => { away = false; Debug.Log("idle"); /* actions to perform when entering the idle state */ },
            Idle,
             () => { /* actions to perform when exiting the idle state */ }
             );
 
 
         State evadeState = new State("Evade",
-           () => { Debug.Log("evade");/* actions to perform when entering the evade state */ },
+           () => { away = true; Debug.Log("evade");/* actions to perform when entering the evade state */ },
            Evade, // set the evade method as the state's action
            () => { fishInfo.BeingChased(false); }
            );
 
 
         State consumeState = new State("Consume",
-           () => { Consume(); /* actions to perform when entering the consume state */ },
+           () => { away = false; Consume(); /* actions to perform when entering the consume state */ },
            Consume, // set the consume method as the state's action
            () => {/* actions to perform when exiting the consume state */ }
            );
@@ -59,7 +58,7 @@ class FishAiBehaviour : MonoBehaviour
 
 
         Transition transitionToPursue = new Transition(
-            () => ( fishInfo.Energy < 90),
+            () => ( fishInfo.Energy < 100),
             () => { },
             pursueState);
 
@@ -69,7 +68,7 @@ class FishAiBehaviour : MonoBehaviour
            evadeState);
 
         Transition transitionToIdle = new Transition(
-            () => (fishInfo.Energy >= 90 && target == null),
+            () => ( target == null),
             () => { },
             idleState);
 
@@ -86,25 +85,29 @@ class FishAiBehaviour : MonoBehaviour
 
         fsm = new StateMachine(idleState);
         pursueState.AddTransition(transitionToIdle);
+        pursueState.AddTransition(transitionToEvade);
         pursueState.AddTransition(transitionToConsume);
         pursueState.AddTransition(transitionToReproduce);
-        pursueState.AddTransition(transitionToEvade);
 
         idleState.AddTransition(transitionToIdle);
-        idleState.AddTransition(transitionToPursue);
         idleState.AddTransition(transitionToEvade);
+        idleState.AddTransition(transitionToPursue);
         idleState.AddTransition(transitionToReproduce);
 
         consumeState.AddTransition(transitionToIdle);
-        consumeState.AddTransition(transitionToPursue);
         consumeState.AddTransition(transitionToEvade);
+        consumeState.AddTransition(transitionToPursue);
+        consumeState.AddTransition(transitionToReproduce);
 
 
+        evadeState.AddTransition(transitionToEvade);
         evadeState.AddTransition(transitionToPursue);
         evadeState.AddTransition(transitionToIdle);
 
 
         reproduceState.AddTransition(transitionToIdle);
+        reproduceState.AddTransition(transitionToEvade);
+        reproduceState.AddTransition(transitionToPursue);
     }
 
     private void Reproduce()
