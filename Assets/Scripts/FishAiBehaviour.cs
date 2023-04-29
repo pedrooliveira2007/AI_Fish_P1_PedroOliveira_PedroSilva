@@ -29,9 +29,9 @@ class FishAiBehaviour : MonoBehaviour
             () => { /* actions to perform when exiting the pursue state */ }
             );
 
-        State idleState = new State("Idle",
+        State wanderState = new State("Idle",
             () => { away = false; Debug.Log("idle"); /* actions to perform when entering the idle state */ },
-           Idle,
+           Wander,
             () => { /* actions to perform when exiting the idle state */ }
             );
 
@@ -58,19 +58,23 @@ class FishAiBehaviour : MonoBehaviour
 
 
         Transition transitionToPursue = new Transition(
-            () => ( fishInfo.Energy < 100),
+            () => (fishInfo.Energy < 100),
             () => { },
             pursueState);
 
         Transition transitionToEvade = new Transition(
-           () => GetClosestFish()!=null && GetClosestFish().tag == "Fish",
+           () => GetClosestFish() != null && GetClosestFish().tag == "Fish",
            () => { },
            evadeState);
 
-        Transition transitionToIdle = new Transition(
-            () => ( target == null),
+        Transition transitionToWander = new Transition(
+            () => (
+            fishInfo.Energy >= 100 ||
+            GetClosestFish() == null &&
+            GetClosestFish(false) == null &&
+            target == null),
             () => { },
-            idleState);
+            wanderState);
 
         Transition transitionToConsume = new Transition(
             () => (target != null && Vector3.Distance(transform.position, target.position) < 0.2f),
@@ -83,18 +87,18 @@ class FishAiBehaviour : MonoBehaviour
             () => { },
             reproduceState);
 
-        fsm = new StateMachine(idleState);
-        pursueState.AddTransition(transitionToIdle);
+        fsm = new StateMachine(wanderState);
+        pursueState.AddTransition(transitionToWander);
         pursueState.AddTransition(transitionToEvade);
         pursueState.AddTransition(transitionToConsume);
         pursueState.AddTransition(transitionToReproduce);
 
-        idleState.AddTransition(transitionToIdle);
-        idleState.AddTransition(transitionToEvade);
-        idleState.AddTransition(transitionToPursue);
-        idleState.AddTransition(transitionToReproduce);
+        wanderState.AddTransition(transitionToWander);
+        wanderState.AddTransition(transitionToEvade);
+        wanderState.AddTransition(transitionToPursue);
+        wanderState.AddTransition(transitionToReproduce);
 
-        consumeState.AddTransition(transitionToIdle);
+        consumeState.AddTransition(transitionToWander);
         consumeState.AddTransition(transitionToEvade);
         consumeState.AddTransition(transitionToPursue);
         consumeState.AddTransition(transitionToReproduce);
@@ -102,10 +106,10 @@ class FishAiBehaviour : MonoBehaviour
 
         evadeState.AddTransition(transitionToEvade);
         evadeState.AddTransition(transitionToPursue);
-        evadeState.AddTransition(transitionToIdle);
+        evadeState.AddTransition(transitionToWander);
 
 
-        reproduceState.AddTransition(transitionToIdle);
+        reproduceState.AddTransition(transitionToWander);
         reproduceState.AddTransition(transitionToEvade);
         reproduceState.AddTransition(transitionToPursue);
     }
@@ -162,11 +166,9 @@ class FishAiBehaviour : MonoBehaviour
     }
 
 
-    private void Idle()
+    private void Wander()
     {
-
-        //change maxSpeed and acceleration to idle value
-        usingSpeed = 0;
+        usingSpeed =normalSpeed;
         MoveForward();
     }
 
@@ -287,8 +289,9 @@ class FishAiBehaviour : MonoBehaviour
 
     private void RotateToTarget(bool _away = false)
     {
-        transform.rotation =_away ? Quaternion.LookRotation(target.position + transform.position) :
-            Quaternion.LookRotation(target.position - transform.position);
+        Vector3 targetDirection = _away ? target.position + transform.position : target.position - transform.position;
+        transform.rotation = Quaternion.LookRotation(targetDirection);
+
     }
 
 
