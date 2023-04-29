@@ -44,7 +44,7 @@ class FishAiBehaviour : MonoBehaviour
 
 
         State consumeState = new State("Consume",
-           () => { away = false; Consume(); /* actions to perform when entering the consume state */ },
+           () => { away = false; Destroy(target.gameObject); /* actions to perform when entering the consume state */ },
            Consume, // set the consume method as the state's action
            () => {/* actions to perform when exiting the consume state */ }
            );
@@ -174,7 +174,6 @@ class FishAiBehaviour : MonoBehaviour
     {
         Debug.Log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         fishInfo.Eat(target);
-        Destroy(target.gameObject);
     }
 
     private void Evade()
