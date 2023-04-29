@@ -18,14 +18,6 @@ public class Fish : MonoBehaviour
         energy = 50f;
     }
 
-    void Update()
-    {
-        if(energy >= 75f)
-        {
-            Reproduce();
-        }
-    }
-
     public void ReduceEnergy(float oldEnergy)
     {
         energy -= oldEnergy;
