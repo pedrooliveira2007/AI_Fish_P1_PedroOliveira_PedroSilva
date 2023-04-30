@@ -141,6 +141,9 @@ class FishAiBehaviour : MonoBehaviour
         reproduceState.AddTransition(transitionToPursue);
     }
 
+    // <summary>
+    // Method responsible for fish reproduction
+    // </summary>
     private void Reproduce()
     {
         fishInfo.Reproduce();
@@ -161,6 +164,9 @@ class FishAiBehaviour : MonoBehaviour
         Animate();
     }
 
+    // <summary>
+    // Method responsible to determine the fish target, depending on his size.
+    // </summary>
     private void Pursue()
     {
 
@@ -194,7 +200,9 @@ class FishAiBehaviour : MonoBehaviour
         MoveForward();
     }
 
-
+    // <summary>
+    // Method responsible for making the fish wander around the fish tank looking for food.
+    // </summary>
     private void Wander()
     {
         if (Vector3.Distance(transform.position, target) < 0.4f)
@@ -209,6 +217,9 @@ class FishAiBehaviour : MonoBehaviour
         MoveForward();
     }
 
+    // <summary>
+    // Method responsible for consuming the nearest target.
+    // </summary>
     private void Consume()
     {
         fishInfo.Eat(targetTransform);
@@ -217,6 +228,9 @@ class FishAiBehaviour : MonoBehaviour
         consume = false;
     }
 
+    // <summary>
+    // Method responsible for making the fish "run" from it's enemy.
+    // </summary>
     private void Evade()
     {
         //change maxSpeed and acceleration to chase/flee value
@@ -232,7 +246,9 @@ class FishAiBehaviour : MonoBehaviour
         MoveForward(true);
     }
 
-
+    // <summary>
+    // Method that returns the closes fish to the agent.
+    // </summary>
     private Transform GetClosestFish(bool enemy = true)
     {
         Rigidbody best = null;
@@ -283,6 +299,9 @@ class FishAiBehaviour : MonoBehaviour
 
     }
 
+    // <summary>
+    // Method that returns the closest seaweed to the agent.
+    // </summary>
     private Transform GetClosestAlgae()
     {
         Collider best = null;
@@ -311,6 +330,9 @@ class FishAiBehaviour : MonoBehaviour
 
     }
 
+    // <summary>
+    // Method responsible for making the fish move in a desired direction.
+    // </summary>
     private void MoveForward(bool inverse = false)
     {
         Vector3 move = Vector3.zero;
