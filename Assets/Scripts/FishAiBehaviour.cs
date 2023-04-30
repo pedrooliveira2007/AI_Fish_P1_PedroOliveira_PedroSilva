@@ -79,7 +79,7 @@ class FishAiBehaviour : MonoBehaviour
             wanderState);
 
         Transition transitionToConsume = new Transition(
-            () => (target != null && Vector3.Distance(transform.position, targetRb.position) < 0.2f),
+            () => (target != null && Vector3.Distance(transform.position, target) < 0.2f),
             () => { },
            consumeState);
 
@@ -313,16 +313,16 @@ class FishAiBehaviour : MonoBehaviour
         {
             anim.SetFloat("Speed", 1);
         }
-        else if ((Vector3.Distance(targetRb.position, transform.position) > 0.5f))
+        else if ((Vector3.Distance(target, transform.position) > 0.5f))
         {
 
-            if (Vector3.Distance(targetRb.position, transform.position) < 1)
+            if (Vector3.Distance(target, transform.position) < 1)
             {
                 anim.SetFloat("Speed", 1);
             }
             else
             {
-                anim.SetFloat("Speed", Vector3.Distance(targetRb.position, transform.position));
+                anim.SetFloat("Speed", Vector3.Distance(target, transform.position));
             }
 
         }
