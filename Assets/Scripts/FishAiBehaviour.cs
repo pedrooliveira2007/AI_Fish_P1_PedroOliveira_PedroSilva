@@ -171,9 +171,9 @@ class FishAiBehaviour : MonoBehaviour
     private void Wander()
     {
         Vector3 pos = new Vector3(
-        Random.Range(-length/2, length/2),
-        Random.Range(0,heigth),
-        Random.Range(-width/2,width/2));
+        Random.Range(-tankLenght/2, tankLenght/2),
+        Random.Range(0,tankHeight),
+        Random.Range(-tankWidht/2,tankWidht/2));
         
         if(Vector3.Distance(transform.position, target)< 0.1f){
         target = pos;
