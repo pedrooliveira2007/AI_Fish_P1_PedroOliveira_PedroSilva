@@ -8,12 +8,15 @@
 ## Pedro Silva:
 - Criação dos diferentes peixes
 - Implementação dos métodos de ação básica de cada peixe
-- 
+- Documentação
+- Comentários
+- Pesquisa sobre a state machine
+- Correção de estados e transições
+- Modelo das algas e barreiras
 
 ## Pedro Oliveira:
 
 - Implementação da state machine
-- debugging do código
 - Implementação do movimento
 - Implementação da rotação dos peixes
 - Implementação da geração do tanque
@@ -22,7 +25,6 @@
 - Modelo do peixe
 - Pesquisa sobre a state machine
 - Testes de lógica e do projeto no geral
-- Conclusão de Pedro Oliveira no relatório
 
 
 # 4 - Introdução
