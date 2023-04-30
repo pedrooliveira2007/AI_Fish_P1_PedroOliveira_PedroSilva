@@ -363,14 +363,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe7c998d775037345acf30c185ca8907, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  normalSpeed: 20
+  normalSpeed: 100
   fastSpeed: 200
   anim: {fileID: 2333570949218039638}
   rb: {fileID: 1775274351692252974}
   tankLenght: 290
   tankWidht: 290
   tankHeight: 190
-  detectionRadius: 20
+  detectionRadius: 25
 --- !u!54 &1775274351692252974
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -45,6 +45,6 @@ public class Fish : MonoBehaviour
     {
         Debug.Log("Spawn");
         fishSpawner.SpawnFish(fishType, transform.position);
-        energy -= 55f;
+        energy -= 50f;
     }
 }

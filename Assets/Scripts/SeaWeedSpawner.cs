@@ -17,7 +17,7 @@ public class SeaWeedSpawner : MonoBehaviour
             int randomNum = Random.Range(0, 100);
             if (randomNum >= 50)
                 SpawnSeaWeed();
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(5f);
         }
     }
 

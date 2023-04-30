@@ -27,39 +27,42 @@ class FishAiBehaviour : MonoBehaviour
     }
     private void Start()
     {
+
         State pursueState = new State("Pursue",
-            () => { away = false; Debug.Log("pur");/* actions to perform when entering the pursue state */},
+            () => { away = false; Debug.Log("pursue ");/* actions to perform when entering the pursue state */},
             Pursue, // set the Chase method as the state's action
-            () => { /* actions to perform when exiting the pursue state */ }
+            () => { target = transform.position; }
             );
 
         State wanderState = new State("Wander",
-            () => { away = false; Debug.Log("Wander"); /* actions to perform when entering the idle state */ },
+            () => { away = false; Debug.Log("Wander"); } /* actions to perform when entering the idle state */,
            Wander,
-            () => { /* actions to perform when exiting the idle state */ }
+            () => { }
             );
 
 
-        State evadeState = new State("Evade",
+        State evadeState = new State("Evade ",
            () =>
            {    /* actions to perform when entering the evade state */
                away = true; Debug.Log("evade");
            },
            Evade, // set the evade method as the state's action
-           () => { }
+           () => { target = transform.position; }
            );
 
 
-        State consumeState = new State("Consume",
+        State consumeState = new State("Consume ",
            () =>
            {    /* actions to perform when entering the consume state */
                away = false;
            },
            Consume, // set the consume method as the state's action
            () =>
-           {   /* actions to perform when exiting the consume state */
+           {
+               consume = false;
                if (targetTransform != null)
                    Destroy(targetTransform.gameObject);
+               target = transform.position;
            }
            );
 
@@ -72,8 +75,9 @@ class FishAiBehaviour : MonoBehaviour
 
 
         Transition transitionToPursue = new Transition(
-            () => (fishInfo.Energy < 100 ||
-                    (fishInfo.FishType == FishType.big ?
+            () => (
+            fishInfo.Energy < 100 &&
+            (fishInfo.FishType == FishType.big ?
                         GetClosestFish(false) != null :
                         GetClosestFish(false) != null ||
                         GetClosestAlgae() != null)),
@@ -82,20 +86,25 @@ class FishAiBehaviour : MonoBehaviour
 
         Transition transitionToEvade = new Transition(
            () => GetClosestFish() != null,
-           () => { target = GetClosestFish().position; },
+           () => { },
            evadeState);
 
         Transition transitionToWander = new Transition(
             () => (
-            fishInfo.Energy >= 100 ||
+            fishInfo.Energy >= 100 || (
             GetClosestFish() == null &&
             GetClosestFish(false) == null &&
-            target == null),
+            targetTransform == null &&
+            Vector3.Distance(target, transform.position) < 0.4f)),
+
             () => { },
             wanderState);
 
         Transition transitionToConsume = new Transition(
-            () => (target != null && consume == true),
+            () => (
+            target != transform.position &&
+            targetTransform != null &&
+            consume == true),
             () => { },
            consumeState);
 
@@ -141,7 +150,7 @@ class FishAiBehaviour : MonoBehaviour
     {
         Action actions = fsm.Update();
         actions?.Invoke();
-        if (target != null)
+        if (target != Vector3.zero && target != transform.position)
         {
             RotateToTarget(away);
         }
@@ -150,7 +159,6 @@ class FishAiBehaviour : MonoBehaviour
     private void Update()
     {
         Animate();
-
     }
 
     private void Pursue()
@@ -182,19 +190,19 @@ class FishAiBehaviour : MonoBehaviour
         //change maxSpeed and acceleration to chase/flee value
         usingSpeed = fastSpeed;
         away = false;
+        // Debug.Log("Pursuing " + targetTransform.name);
         MoveForward();
     }
 
 
     private void Wander()
     {
-        Vector3 pos = new Vector3(
-        Random.Range(-tankLenght / 2, tankLenght / 2),
-        Random.Range(0, tankHeight),
-        Random.Range(-tankWidht / 2, tankWidht / 2));
-
-        if (Vector3.Distance(transform.position, target) < 0.1f)
+        if (Vector3.Distance(transform.position, target) < 0.4f)
         {
+            Vector3 pos = new Vector3(
+            Random.Range(-tankLenght / 2, tankLenght / 2),
+            Random.Range(0, tankHeight),
+            Random.Range(-tankWidht / 2, tankWidht / 2));
             target = pos;
         }
         usingSpeed = normalSpeed;
@@ -206,13 +214,21 @@ class FishAiBehaviour : MonoBehaviour
         fishInfo.Eat(targetTransform);
         target = transform.position;
         targetTransform = null;
+        consume = false;
     }
 
     private void Evade()
     {
         //change maxSpeed and acceleration to chase/flee value
-        usingSpeed = fastSpeed;
-        away = true;
+        if (GetClosestFish())
+        {
+            target = GetClosestFish().position;
+            usingSpeed = fastSpeed;
+            away = true;
+            Debug.Log("Evading " + targetTransform.name);
+        }
+
+       
         MoveForward(true);
     }
 
@@ -298,7 +314,7 @@ class FishAiBehaviour : MonoBehaviour
     private void MoveForward(bool inverse = false)
     {
         Vector3 move = Vector3.zero;
-        if (target != null)
+        if (target != null && target != transform.position)
         {
             if (!inverse)
                 move = (target - transform.position).normalized * usingSpeed * Time.fixedDeltaTime;
@@ -307,7 +323,7 @@ class FishAiBehaviour : MonoBehaviour
         }
 
 
-        rb.velocity = new Vector3(move.x, move.y, move.z);
+        rb.velocity = move;
         // Limit the maximum speed of the object
         if (rb.velocity.magnitude > usingSpeed)
         {
