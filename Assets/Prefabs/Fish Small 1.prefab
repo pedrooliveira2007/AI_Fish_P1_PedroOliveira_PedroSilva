@@ -913,14 +913,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe7c998d775037345acf30c185ca8907, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  normalSpeed: 20
+  normalSpeed: 100
   fastSpeed: 200
   anim: {fileID: 4295275684897713397}
   rb: {fileID: 4295275684897713394}
   tankLenght: 290
   tankWidht: 290
   tankHeight: 190
-  detectionRadius: 10
+  detectionRadius: 18
 --- !u!54 &4295275684897713394
 Rigidbody:
   m_ObjectHideFlags: 0
