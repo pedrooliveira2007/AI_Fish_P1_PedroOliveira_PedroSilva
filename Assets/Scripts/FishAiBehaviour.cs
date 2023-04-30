@@ -9,8 +9,10 @@ class FishAiBehaviour : MonoBehaviour
     private float usingSpeed = 0;
 
     private Vector3 target;
-    private Transform targetRb;
+    private Transform targetTransform;
     private Fish fishInfo;
+    private bool consume = false;
+
     private bool away = false;
     [SerializeField] private Animator anim;
     [SerializeField] private Rigidbody rb;
@@ -56,8 +58,8 @@ class FishAiBehaviour : MonoBehaviour
            Consume, // set the consume method as the state's action
            () =>
            {   /* actions to perform when exiting the consume state */
-               if (targetRb != null)
-                   Destroy(targetRb.gameObject);
+               if (targetTransform != null)
+                   Destroy(targetTransform.gameObject);
            }
            );
 
@@ -89,7 +91,7 @@ class FishAiBehaviour : MonoBehaviour
             wanderState);
 
         Transition transitionToConsume = new Transition(
-            () => (target != null && Vector3.Distance(transform.position, target) < 0.2f),
+            () => (target != null && consume == true),
             () => { },
            consumeState);
 
@@ -158,7 +160,7 @@ class FishAiBehaviour : MonoBehaviour
             if (toClosest != null && target != toClosest.position && fishInfo.Energy < 75)
             {
                 target = toClosest.position;
-                targetRb = toClosest;
+                targetTransform = toClosest;
             }
         }
 
@@ -170,7 +172,7 @@ class FishAiBehaviour : MonoBehaviour
             if (toClosest != null && target != toClosest.position)
             {
                 target = toClosest.position;
-                targetRb = toClosest;
+                targetTransform = toClosest;
             }
         }
         //change maxSpeed and acceleration to chase/flee value
@@ -198,9 +200,9 @@ class FishAiBehaviour : MonoBehaviour
     private void Consume()
     {
         Debug.Log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        fishInfo.Eat(targetRb);
+        fishInfo.Eat(targetTransform);
         target = Vector3.zero;
-        targetRb = null;
+        targetTransform = null;
     }
 
     private void Evade()
@@ -348,4 +350,20 @@ class FishAiBehaviour : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, detectionRadius);
     }
 
+
+    void OnTriggerEnter(Collider other)
+    {
+        // Verifies if the collider is from the target or if is in the target
+        if (targetTransform != null)
+        {
+            if (other.transform == targetTransform ||
+                other.transform.parent != null &&
+                other.transform.IsChildOf(targetTransform))
+            {
+                consume = true;
+            }
+        }
+
+        else consume = false;
+    }
 }
