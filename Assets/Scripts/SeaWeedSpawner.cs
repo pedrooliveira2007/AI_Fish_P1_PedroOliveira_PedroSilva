@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SeaWeedSpawner : MonoBehaviour
@@ -13,10 +12,10 @@ public class SeaWeedSpawner : MonoBehaviour
 
     private IEnumerator SeaWeedTimer()
     {
-        while(true)
+        while (true)
         {
-            int randomNum = Random.Range(0,100);
-            if(randomNum >= 50)
+            int randomNum = Random.Range(0, 100);
+            if (randomNum >= 50)
                 SpawnSeaWeed();
             yield return new WaitForSeconds(1f);
         }
@@ -24,6 +23,6 @@ public class SeaWeedSpawner : MonoBehaviour
 
     public void SpawnSeaWeed()
     {
-        //Instantiate(sewWeed);
+        Instantiate(seaWeed, transform.position, Quaternion.identity);
     }
 }
