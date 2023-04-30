@@ -1,16 +1,18 @@
 using LibGameAI.FSMs;
 using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 class FishAiBehaviour : MonoBehaviour
 {
     [SerializeField] private float normalSpeed, fastSpeed;
     private float usingSpeed = 0;
 
-    private Transform target;
+    private Vector3 target;
+    private Transform targetRb;
     private Fish fishInfo;
     private bool away = false;
-    [SerializeField] private Animator anim;
+        [SerializeField] private Animator anim;
     [SerializeField] private Rigidbody rb;
     [SerializeField] private float tankHeight, tankLenght, tankWidht;
 
@@ -63,8 +65,8 @@ class FishAiBehaviour : MonoBehaviour
             pursueState);
 
         Transition transitionToEvade = new Transition(
-           () => GetClosestFish() != null && GetClosestFish().tag == "Fish",
-           () => { },
+           () => GetClosestFish() != null ,
+           () => { target = GetClosestFish().position;},
            evadeState);
 
         Transition transitionToWander = new Transition(
@@ -141,7 +143,7 @@ class FishAiBehaviour : MonoBehaviour
         if (fishInfo.FishType != FishType.big)
         {
             // Get vector to closest target
-            Transform toClosest = GetClosestAlgae();
+            Vector3 toClosest = GetClosestAlgae().position;
 
             if (toClosest != null && target != toClosest && fishInfo.Energy < 75)
             {
@@ -152,7 +154,7 @@ class FishAiBehaviour : MonoBehaviour
         if (fishInfo.FishType != FishType.small)
         {
             // Get vector to closest target
-            Transform toClosest = GetClosestFish(false);
+            Vector3 toClosest = GetClosestFish(false).position;
 
             if (toClosest != null && target != toClosest)
             {
@@ -168,14 +170,24 @@ class FishAiBehaviour : MonoBehaviour
 
     private void Wander()
     {
-        usingSpeed =normalSpeed;
+        Vector3 pos = new Vector3(
+        Random.Range(-length/2, length/2),
+        Random.Range(0,heigth),
+        Random.Range(-width/2,width/2));
+        
+        if(Vector3.Distance(transform.position, target)< 0.1f){
+        target = pos;
+        }
+        usingSpeed = normalSpeed;
         MoveForward();
     }
 
     private void Consume()
     {
         Debug.Log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        fishInfo.Eat(target);
+        fishInfo.Eat(targetRb);
+        target = null;
+        targetRb = null:
     }
 
     private void Evade()
@@ -271,9 +283,9 @@ class FishAiBehaviour : MonoBehaviour
         if (target != null)
         {
             if (!inverse)
-                move = (target.position - transform.position) * usingSpeed * Time.fixedDeltaTime;
+                move = (target - transform.position) * usingSpeed * Time.fixedDeltaTime;
             else
-                move = (-target.position - transform.position) * usingSpeed * Time.fixedDeltaTime;
+                move = (-target - transform.position) * usingSpeed * Time.fixedDeltaTime;
         }
 
 
@@ -289,7 +301,7 @@ class FishAiBehaviour : MonoBehaviour
 
     private void RotateToTarget(bool _away = false)
     {
-        Vector3 targetDirection = _away ? target.position + transform.position : target.position - transform.position;
+        Vector3 targetDirection = _away ? target + transform.position : target - transform.position;
         transform.rotation = Quaternion.LookRotation(targetDirection);
 
     }
