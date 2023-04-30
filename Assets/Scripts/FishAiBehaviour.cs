@@ -143,22 +143,22 @@ class FishAiBehaviour : MonoBehaviour
         if (fishInfo.FishType != FishType.big)
         {
             // Get vector to closest target
-            Vector3 toClosest = GetClosestAlgae().position;
+            Transform toClosest = GetClosestAlgae();
 
             if (toClosest != null && target != toClosest && fishInfo.Energy < 75)
             {
-                target = toClosest;
+                target = toClosest.position;
             }
         }
 
         if (fishInfo.FishType != FishType.small)
         {
             // Get vector to closest target
-            Vector3 toClosest = GetClosestFish(false).position;
+            Transform toClosest = GetClosestFish(false);
 
             if (toClosest != null && target != toClosest)
             {
-                target = toClosest;
+                target = toClosest.position;
             }
         }
         //change maxSpeed and acceleration to chase/flee value
