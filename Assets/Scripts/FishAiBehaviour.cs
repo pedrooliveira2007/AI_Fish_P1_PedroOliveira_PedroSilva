@@ -145,7 +145,7 @@ class FishAiBehaviour : MonoBehaviour
             // Get vector to closest target
             Transform toClosest = GetClosestAlgae();
 
-            if (toClosest != null && target != toClosest && fishInfo.Energy < 75)
+            if (toClosest != null && target != toClosest.position && fishInfo.Energy < 75)
             {
                 target = toClosest.position;
                 targetRb = toClosest;
@@ -157,7 +157,7 @@ class FishAiBehaviour : MonoBehaviour
             // Get vector to closest target
             Transform toClosest = GetClosestFish(false);
 
-            if (toClosest != null && target != toClosest)
+            if (toClosest != null && target != toClosest.position)
             {
                 target = toClosest.position;
                 targetRb = toClosest;
