@@ -46,7 +46,7 @@ class FishAiBehaviour : MonoBehaviour
 
 
         State consumeState = new State("Consume",
-           () => { away = false; Destroy(target.gameObject); /* actions to perform when entering the consume state */ },
+           () => { away = false; Destroy(targetRb.gameObject); /* actions to perform when entering the consume state */ },
            Consume, // set the consume method as the state's action
            () => {/* actions to perform when exiting the consume state */ }
            );
@@ -79,7 +79,7 @@ class FishAiBehaviour : MonoBehaviour
             wanderState);
 
         Transition transitionToConsume = new Transition(
-            () => (target != null && Vector3.Distance(transform.position, target.position) < 0.2f),
+            () => (target != null && Vector3.Distance(transform.position, targetRb.position) < 0.2f),
             () => { },
            consumeState);
 
@@ -186,8 +186,8 @@ class FishAiBehaviour : MonoBehaviour
     {
         Debug.Log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         fishInfo.Eat(targetRb);
-        target = null;
-        targetRb = null:
+        target = Vector3.zero;
+        targetRb = null;
     }
 
     private void Evade()
@@ -313,16 +313,16 @@ class FishAiBehaviour : MonoBehaviour
         {
             anim.SetFloat("Speed", 1);
         }
-        else if ((Vector3.Distance(target.position, transform.position) > 0.5f))
+        else if ((Vector3.Distance(targetRb.position, transform.position) > 0.5f))
         {
 
-            if (Vector3.Distance(target.position, transform.position) < 1)
+            if (Vector3.Distance(targetRb.position, transform.position) < 1)
             {
                 anim.SetFloat("Speed", 1);
             }
             else
             {
-                anim.SetFloat("Speed", Vector3.Distance(target.position, transform.position));
+                anim.SetFloat("Speed", Vector3.Distance(targetRb.position, transform.position));
             }
 
         }
