@@ -1,8 +1,8 @@
 # AI_Fish_P1_PedroOliveira_PedroSilva
 
 # Alunos:
-## Pedro Silva
-## Pedro Oliverira - a21705187
+## Pedro Silva - a22001798
+## Pedro Oliveira - a21705187
 
 # 3 - Responsabilidades:
 ## Pedro Silva:
