@@ -21,13 +21,14 @@
 ## O grupo utilizado state machine para a implementação de decisões dos agentes (Evade,Consume,Wander,Pursue,Reproduce), que funciona da seguinte forma:
 ## Peixe pequeno:
 - Procura pela alga mais próxima "GetClosestAlgae()"
-- 
+- Se não tiver inimigo próximo dirige-se até à alga e come-a, caso não exista alga fica em "Wander()" pelo aquário, caso contrário foge do inimigo "Evade()".
 
 ## Peixe médio:
 - Procura pelo peixe mais próximo "GetClosestFish()"
+- Se não tiver inimigo próximo dirige-se até ao peixe e come-o, caso não exista peixe, procura alga e caso não exista alga fica em modo "Wander()", contudo, caso encontre um inimigo entra em estado "Evade()".
 
 ## Peixe grande:
-- Procura pelo peixe mais próximo "GetClosestFish()"
+- Procura pelo peixe mais próximo "GetClosestFish()"s
 
 ## Alga:
 - Sobre continuamente no aquário até chegar ao teto, acabando por se destruir.
