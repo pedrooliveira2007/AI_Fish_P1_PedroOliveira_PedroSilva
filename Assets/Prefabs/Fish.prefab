@@ -364,13 +364,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   normalSpeed: 20
-  fastSpeed: 100
+  fastSpeed: 200
   anim: {fileID: 2333570949218039638}
   rb: {fileID: 1775274351692252974}
-  tankHeight: 5
-  tankLenght: 9
-  tankWidht: 20
-  detectionRadius: 2
+  tankLenght: 290
+  tankWidht: 290
+  tankHeight: 190
+  detectionRadius: 20
 --- !u!54 &1775274351692252974
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -385,7 +385,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &-4484241583558553173
 MonoBehaviour:
