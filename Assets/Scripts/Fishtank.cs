@@ -19,9 +19,5 @@ public class Fishtank : MonoBehaviour
         Destroy(cube.GetComponent<BoxCollider>());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
+  
 }
