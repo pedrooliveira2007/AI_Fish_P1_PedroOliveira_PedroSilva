@@ -148,6 +148,7 @@ class FishAiBehaviour : MonoBehaviour
             if (toClosest != null && target != toClosest && fishInfo.Energy < 75)
             {
                 target = toClosest.position;
+                targetRb = toClosest;
             }
         }
 
@@ -159,6 +160,7 @@ class FishAiBehaviour : MonoBehaviour
             if (toClosest != null && target != toClosest)
             {
                 target = toClosest.position;
+                targetRb = toClosest;
             }
         }
         //change maxSpeed and acceleration to chase/flee value
