@@ -16,7 +16,7 @@ class FishAiBehaviour : MonoBehaviour
     private bool away = false;
     [SerializeField] private Animator anim;
     [SerializeField] private Rigidbody rb;
-    [SerializeField] private float tankHeight, tankLenght, tankWidht;
+    [SerializeField] private float tankLenght, tankWidht, tankHeight;
 
     private StateMachine fsm;
     [SerializeField] private float detectionRadius = 2f;
@@ -33,8 +33,8 @@ class FishAiBehaviour : MonoBehaviour
             () => { /* actions to perform when exiting the pursue state */ }
             );
 
-        State wanderState = new State("Idle",
-            () => { away = false; Debug.Log("idle"); /* actions to perform when entering the idle state */ },
+        State wanderState = new State("Wander",
+            () => { away = false; Debug.Log("Wander"); /* actions to perform when entering the idle state */ },
            Wander,
             () => { /* actions to perform when exiting the idle state */ }
             );
@@ -65,14 +65,18 @@ class FishAiBehaviour : MonoBehaviour
 
 
         State reproduceState = new State("Reproduce",
-           () => { Debug.Log("repro");/* actions to perform when entering the consume state */ },
+           () => { /* actions to perform when entering the consume state */ },
            Reproduce, // set the consume method as the state's action
            () => {/* actions to perform when exiting the consume state */ }
            );
 
 
         Transition transitionToPursue = new Transition(
-            () => (fishInfo.Energy < 100),
+            () => (fishInfo.Energy < 100 ||
+                    (fishInfo.FishType == FishType.big ?
+                        GetClosestFish(false) != null :
+                        GetClosestFish(false) != null ||
+                        GetClosestAlgae() != null)),
             () => { },
             pursueState);
 
@@ -199,9 +203,8 @@ class FishAiBehaviour : MonoBehaviour
 
     private void Consume()
     {
-        Debug.Log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         fishInfo.Eat(targetTransform);
-        target = Vector3.zero;
+        target = transform.position;
         targetTransform = null;
     }
 
