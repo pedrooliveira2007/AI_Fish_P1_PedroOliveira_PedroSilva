@@ -41,17 +41,17 @@
 
 # 9 - Referências
 ## Fish animation
-### https://www.youtube.com/watch?v=oS703kCYwTA&t=781s
+ https://www.youtube.com/watch?v=oS703kCYwTA&t=781s
 
 ## FSM, States and Transition
-### https://github.com/nunofachada/AIUnityExamples/blob/main/SimpleFSMs/Assets/Scripts/FSMs/Transition.cs
+ https://github.com/nunofachada/AIUnityExamples/blob/main/SimpleFSMs/Assets/Scripts/FSMs/Transition.cs
 
 ## Action Delegate
-### https://www.tutorialsteacher.com/csharp/csharp-action-delegate
+ https://www.tutorialsteacher.com/csharp/csharp-action-delegate
 
 ## Animation Parameters
-### https://docs.unity3d.com/Manual/AnimationParameters.html
+ https://docs.unity3d.com/Manual/AnimationParameters.html
 
 ## Dúvidas sobre erros de compilação e duvidas sobre rotação do peixe:
-### ChatGPT
+ ChatGPT
 
